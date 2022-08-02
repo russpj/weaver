@@ -59,6 +59,7 @@ class Step:
         self.previous_word = previous_word
         return
 
+
 class Solver:
     def __init__(self, start, target, dictionary):
         self.start = start
@@ -67,7 +68,6 @@ class Solver:
         first_step = Step(start, 1, 0)
         self.steps = [first_step]
         return
-
 
     def print_solution(self, step_index):
         solution = []
@@ -89,7 +89,6 @@ class Solver:
                 return True
         return False
 
-
     def solve(self, verbose=False):
         if verbose:
             print(f'Find {self.target} starting with {self.start}')
@@ -110,7 +109,6 @@ class Solver:
                         self.steps.append(next_step)
             
             step_index += 1
-
         return
 
 
@@ -165,6 +163,7 @@ def main(arguments):
 
     if stats:
         pass
+
 
 if __name__ == '__main__':
     main(argv[1:])
