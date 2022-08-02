@@ -53,29 +53,55 @@ def different_letters(word1, word2):
 
 
 class Step:
-    def __init__(this, word, step, previous_word):
-        this.word = word
-        this.step = step
-        this.previous_word = previous_word
+    def __init__(self, word, step, previous_word):
+        self.word = word
+        self.step = step
+        self.previous_word = previous_word
         return
 
 class Solver:
-    def __init__(this, start, target, dictionary):
-        this.start = start
-        this.target = target
-        this.dictionary = dictionary
+    def __init__(self, start, target, dictionary):
+        self.start = start
+        self.target = target
+        self.dictionary = dictionary
         first_step = Step(start, 1, 0)
-        this.steps = [first_step]
+        self.steps = [first_step]
         return
 
-    def solve(this, verbose=False):
-        if verbose:
-            print(f'Find {this.target} starting with {this.start}')
-            print('Candidate second words:')
 
-            for word in this.dictionary:
-                if different_letters(this.start, word) == 1:
-                    print(word)
+    def print_solution(self, step_index):
+        solution = []
+        while True:
+            step = self.steps[step_index]
+            solution.append(step.word)
+            if step.word == self.start:
+                break
+            step_index = step.previous_word
+        solution.reverse()
+        solution_display = '-->'.join(str(x) for x in solution)
+        print(f'The solution is {solution_display}')
+
+
+    def solve(self, verbose=False):
+        if verbose:
+            print(f'Find {self.target} starting with {self.start}')
+
+        step_index = 0
+        while step_index < len(self.steps):
+            step = self.steps[step_index]
+            if step.word == self.target:
+                self.print_solution(step_index)
+                break
+
+            if (verbose):
+                print(f'Looking at {step.word} at step {step.step}')
+            for word in self.dictionary:
+                if different_letters(step.word, word) == 1:
+                    next_step = Step(word, step.step+1, step_index)
+                    self.steps.append(next_step)
+            
+            step_index += 1
+
         return
 
 
@@ -114,7 +140,7 @@ def main(arguments):
     elif len(args) > 1:
         keys = args
     else:
-        keys = ["iamb", "poet"]
+        keys = ["dogs","bark"]
 
     if len(keys) % 2 != 0:
         print(f'Invalid Arguments: {command_line_documentation}')
