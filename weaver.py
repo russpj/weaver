@@ -44,6 +44,18 @@ def read_dictionary(dictionary_file_name):
     return words
 
 
+class Solver:
+    def __init__(this, start, target):
+        this.start = start
+        this.target = target
+        return
+
+    def solve(this, verbose=False):
+        if verbose:
+            print(f'Find {this.target} starting with {this.start}')
+        return
+
+
 def main(arguments):
     command_line_documentation = "Wordle.py -h -v -s -l {tapestries_file} {start_word} {end_word}"
     num_letters = 4
@@ -90,9 +102,9 @@ def main(arguments):
         last = keys[1]
         keys = keys[2:]
         
-        if verbose:
-            print(f'Weaving from {first} to {last}')
-
+        solver = Solver(first, last)
+        solver.solve(verbose)
+        
     if stats:
         pass
 
