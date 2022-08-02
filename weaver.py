@@ -78,7 +78,7 @@ class Solver:
             step_index = step.previous_word
         solution.reverse()
         solution_display = '-->'.join(str(x) for x in solution)
-        print(f'The solution is {solution_display}')
+        print(f'The {len(solution)-1} step solution is {solution_display}')
 
     def word_used_previously(self, step):
         for previous_step in self.steps:
