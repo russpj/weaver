@@ -35,10 +35,10 @@ def convert_score_to_colors(score):
     return letters
 
 
-def read_dictionary(dictionary_file_name):
+def read_words(words_file_name):
     words = []
-    with open(dictionary_file_name, "r") as dictionary_file:
-        for line in dictionary_file:
+    with open(words_file_name, "r") as words_file:
+        for line in words_file:
             for word in line.split():
                 words.append(word)
     return words
@@ -64,7 +64,7 @@ def main(arguments):
     verbose = False
     stats = False
 
-    dictionary = read_dictionary(dictionary_name)
+    dictionary = read_words(dictionary_name)
    
     try:
         opts, args = getopt(arguments, "hvsl:", ("help", "verbose", "statistics", "list="))
@@ -87,7 +87,7 @@ def main(arguments):
             list = arg
 
     if list != '':
-        keys = read_keys(list)
+        keys = read_words(list)
     elif len(args) > 1:
         keys = args
     else:
