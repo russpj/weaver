@@ -52,11 +52,20 @@ def different_letters(word1, word2):
     return differences
 
 
+class Step:
+    def __init__(this, word, step, previous_word):
+        this.word = word
+        this.step = step
+        this.previous_word = previous_word
+        return
+
 class Solver:
     def __init__(this, start, target, dictionary):
         this.start = start
         this.target = target
         this.dictionary = dictionary
+        first_step = Step(start, 1, 0)
+        this.steps = [first_step]
         return
 
     def solve(this, verbose=False):
