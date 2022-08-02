@@ -44,15 +44,29 @@ def read_words(words_file_name):
     return words
 
 
+def different_letters(word1, word2):
+    differences = 0
+    for letter1, letter2 in zip(word1, word2):
+        if letter1 != letter2:
+            differences += 1
+    return differences
+
+
 class Solver:
-    def __init__(this, start, target):
+    def __init__(this, start, target, dictionary):
         this.start = start
         this.target = target
+        this.dictionary = dictionary
         return
 
     def solve(this, verbose=False):
         if verbose:
             print(f'Find {this.target} starting with {this.start}')
+            print('Candidate second words:')
+
+            for word in this.dictionary:
+                if different_letters(this.start, word) == 1:
+                    print(word)
         return
 
 
@@ -102,7 +116,7 @@ def main(arguments):
         last = keys[1]
         keys = keys[2:]
         
-        solver = Solver(first, last)
+        solver = Solver(first, last, dictionary)
         solver.solve(verbose)
 
     if stats:
