@@ -62,10 +62,9 @@ class Step:
 
 class Solver:
     def __init__(self, start, target, dictionary):
-        self.start = start
         self.target = target
         self.dictionary = dictionary
-        first_step = Step(start, 1, 0)
+        first_step = Step(start, 0, 0)
         self.steps = [first_step]
         return
 
@@ -74,7 +73,7 @@ class Solver:
         while True:
             step = self.steps[step_index]
             solution.append(step.word)
-            if step.word == self.start:
+            if step.step == 0:
                 break
             step_index = step.previous_word
         solution.reverse()
