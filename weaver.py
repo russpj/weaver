@@ -81,6 +81,14 @@ class Solver:
         solution_display = '-->'.join(str(x) for x in solution)
         print(f'The solution is {solution_display}')
 
+    def word_used_previously(self, step):
+        for previous_step in self.steps:
+            if previous_step.step == step.step:
+                break
+            if previous_step.word == step.word:
+                return True
+        return False
+
 
     def solve(self, verbose=False):
         if verbose:
@@ -98,7 +106,8 @@ class Solver:
             for word in self.dictionary:
                 if different_letters(step.word, word) == 1:
                     next_step = Step(word, step.step+1, step_index)
-                    self.steps.append(next_step)
+                    if not self.word_used_previously(next_step):
+                        self.steps.append(next_step)
             
             step_index += 1
 
