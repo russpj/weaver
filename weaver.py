@@ -91,7 +91,7 @@ def main(arguments):
     elif len(args) > 1:
         keys = args
     else:
-        keys = ["iamb", "poem"]
+        keys = ["iamb", "poet"]
 
     if len(keys) % 2 != 0:
         print(f'Invalid Arguments: {command_line_documentation}')
@@ -104,7 +104,7 @@ def main(arguments):
         
         solver = Solver(first, last)
         solver.solve(verbose)
-        
+
     if stats:
         pass
 
