@@ -69,6 +69,8 @@ class Solver:
         self.steps = [first_step]
         self.verbose = verbose
         self.solutions_found = False
+        self.solutions_level = -1
+        self.stop_solver = False
         self.solutions = []
         return
 
@@ -82,7 +84,7 @@ class Solver:
             step_index = step.previous_word
         solution.reverse()
         solution_display = '-->'.join(str(x) for x in solution)
-        print(f'The {len(solution)-1} step solution is {solution_display}')
+        print(f'A {len(solution)-1} step solution is {solution_display}')
 
     def word_used_previously(self, step):
         for previous_step in self.steps:
@@ -93,10 +95,15 @@ class Solver:
     def add_step(self, step):
         target_found = step.word == self.target
         if target_found or not self.word_used_previously(step):
+            if self.solutions_found:
+                if step.step > self.solutions_level:
+                    self.stop_solver = True
             step_index = len(self.steps)
             self.steps.append(step)
             if target_found:
-                self.solutions_found = True
+                if not self.solutions_found:
+                    self.solutions_found = True
+                    self.solutions_level = step.step
                 self.solutions.append(step_index)
         return
 
@@ -105,7 +112,7 @@ class Solver:
             print(f'Find {self.target} starting with {self.steps[0].word}')
 
         step_index = 0
-        while not self.solutions_found and step_index < len(self.steps):
+        while not self.stop_solver and step_index < len(self.steps):
             step = self.steps[step_index]
             
             if self.verbose:
