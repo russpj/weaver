@@ -82,7 +82,7 @@ class Solver:
 
     def word_used_previously(self, step):
         for previous_step in self.steps:
-            if previous_step.step == step.step:
+            if previous_step.step > step.step:
                 break
             if previous_step.word == step.word:
                 return True
