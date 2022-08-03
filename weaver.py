@@ -6,6 +6,7 @@
 from sys import stdin, stdout, stderr, argv
 from getopt import getopt, GetoptError
 from math import log2
+from time import process_time
 
 
 class ansi_colors:
@@ -155,6 +156,7 @@ def main(arguments):
         print(f'Invalid Arguments: {command_line_documentation}')
         exit(2)
 
+    start_time = process_time()
     while keys:
         first = keys[0]
         last = keys[1]
@@ -162,8 +164,10 @@ def main(arguments):
         
         solver = Solver(first, last, dictionary, verbose)
         solver.solve()
+    end_time = process_time()
 
     if stats:
+        print(f'Duration: {end_time - start_time} seconds')
         pass
 
 
