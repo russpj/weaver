@@ -68,6 +68,8 @@ class Solver:
         first_step = Step(start, 0, 0)
         self.steps = [first_step]
         self.verbose = verbose
+        self.solutions_found = False
+        self.solutions = []
         return
 
     def print_solution(self, step_index):
@@ -89,8 +91,13 @@ class Solver:
         return False
 
     def add_step(self, step):
-        if not self.word_used_previously(step):
+        target_found = step.word == self.target
+        if target_found or not self.word_used_previously(step):
+            step_index = len(self.steps)
             self.steps.append(step)
+            if target_found:
+                self.solutions_found = True
+                self.solutions.append(step_index)
         return
 
     def solve(self):
@@ -98,20 +105,22 @@ class Solver:
             print(f'Find {self.target} starting with {self.steps[0].word}')
 
         step_index = 0
-        while step_index < len(self.steps):
+        while not self.solutions_found and step_index < len(self.steps):
             step = self.steps[step_index]
-            if step.word == self.target:
-                self.print_solution(step_index)
-                break
-
+            
             if self.verbose:
                 print(f'Looking at {step.word} at step {step.step}')
+            
             for word in self.dictionary:
                 if different_letters(step.word, word) == 1:
                     next_step = Step(word, step.step+1, step_index)
                     self.add_step(next_step)
 
             step_index += 1
+
+        for solution in self.solutions:
+            self.print_solution(solution)
+
         return
 
 
@@ -168,7 +177,7 @@ def main(arguments):
 
     if stats:
         print(f'Duration: {end_time - start_time} seconds')
-        pass
+
 
 
 if __name__ == '__main__':
