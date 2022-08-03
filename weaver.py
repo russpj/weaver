@@ -88,7 +88,7 @@ class Solver:
 
     def solve(self, verbose=False):
         if verbose:
-            print(f'Find {self.target} starting with {self.start}')
+            print(f'Find {self.target} starting with {self.steps[0].word}')
 
         step_index = 0
         while step_index < len(self.steps):
