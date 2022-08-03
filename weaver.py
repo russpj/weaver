@@ -61,11 +61,12 @@ class Step:
 
 
 class Solver:
-    def __init__(self, start, target, dictionary):
+    def __init__(self, start, target, dictionary, verbose=False):
         self.target = target
         self.dictionary = dictionary
         first_step = Step(start, 0, 0)
         self.steps = [first_step]
+        self.verbose = verbose
         return
 
     def print_solution(self, step_index):
@@ -91,8 +92,8 @@ class Solver:
             self.steps.append(step)
         return
 
-    def solve(self, verbose=False):
-        if verbose:
+    def solve(self):
+        if self.verbose:
             print(f'Find {self.target} starting with {self.steps[0].word}')
 
         step_index = 0
@@ -102,13 +103,13 @@ class Solver:
                 self.print_solution(step_index)
                 break
 
-            if (verbose):
+            if self.verbose:
                 print(f'Looking at {step.word} at step {step.step}')
             for word in self.dictionary:
                 if different_letters(step.word, word) == 1:
                     next_step = Step(word, step.step+1, step_index)
                     self.add_step(next_step)
-                    
+
             step_index += 1
         return
 
@@ -159,8 +160,8 @@ def main(arguments):
         last = keys[1]
         keys = keys[2:]
         
-        solver = Solver(first, last, dictionary)
-        solver.solve(verbose)
+        solver = Solver(first, last, dictionary, verbose)
+        solver.solve()
 
     if stats:
         pass
