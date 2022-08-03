@@ -86,6 +86,11 @@ class Solver:
                 return True
         return False
 
+    def add_step(self, step):
+        if not self.word_used_previously(step):
+            self.steps.append(step)
+        return
+
     def solve(self, verbose=False):
         if verbose:
             print(f'Find {self.target} starting with {self.steps[0].word}')
@@ -102,9 +107,8 @@ class Solver:
             for word in self.dictionary:
                 if different_letters(step.word, word) == 1:
                     next_step = Step(word, step.step+1, step_index)
-                    if not self.word_used_previously(next_step):
-                        self.steps.append(next_step)
-            
+                    self.add_step(next_step)
+                    
             step_index += 1
         return
 
