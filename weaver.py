@@ -204,9 +204,10 @@ def main(arguments):
 
     start_time = process_time()
     if count:
+        sets = []
         counter = Counter(dictionary, verbose)
         counter.count("poem")
-        print(f'{len(counter.found_words)} words found from {len(dictionary)} words in dictionary')
+        sets.append(counter.found_words)
         new_starting_words = []
         for word in dictionary:
             if word not in counter.found_words:
@@ -215,11 +216,16 @@ def main(arguments):
         for starting_word in new_starting_words:
             if starting_word not in printed_words:
                 counter.count(starting_word)
-                print(f'found a set of {len(counter.found_words)} words:', end='')
+                sets.append(counter.found_words)
                 for output_word in counter.found_words:
                     printed_words.add(output_word)
-                    print(f'{output_word} ', end='')
-                print()
+
+        print(f'Found {len(sets)} reachable sets')
+        for reachable_set in sets:
+            print(f'found a set of {len(reachable_set)} words:', end='')
+            for output_word in reachable_set:
+                print(f'{output_word} ', end='')
+            print()
 
     else:
         while keys:
