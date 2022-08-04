@@ -206,21 +206,15 @@ def main(arguments):
     if count:
         sets = []
         counter = Counter(dictionary, verbose)
-        counter.count("poem")
-        sets.append(counter.found_words)
-        new_starting_words = []
-        for word in dictionary:
-            if word not in counter.found_words:
-                new_starting_words.append(word)
         printed_words = set()
-        for starting_word in new_starting_words:
+        for starting_word in dictionary:
             if starting_word not in printed_words:
                 counter.count(starting_word)
                 sets.append(counter.found_words)
                 for output_word in counter.found_words:
                     printed_words.add(output_word)
 
-        print(f'Found {len(sets)} reachable sets')
+        print(f'Found {len(sets)} connected sets across {len(dictionary)} words.')
         for reachable_set in sets:
             print(f'found a set of {len(reachable_set)} words:', end='')
             for output_word in reachable_set:
