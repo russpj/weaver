@@ -84,11 +84,11 @@ class Solver:
             step_index = step.previous_word
         solution.reverse()
         solution_display = '-->'.join(str(x) for x in solution)
-        print(f'A {len(solution)-1} step solution is {solution_display}')
+        print(f'{solution_display}')
 
     def word_used_previously(self, step):
         for previous_step in self.steps:
-            if previous_step.word == step.word:
+            if previous_step.word == step.word and previous_step.step < step.step:
                 return True
         return False
 
@@ -125,6 +125,7 @@ class Solver:
 
             step_index += 1
 
+        print(f'{len(self.solutions)} {self.solutions_level}-step solutions')
         for solution in self.solutions:
             self.print_solution(solution)
 
