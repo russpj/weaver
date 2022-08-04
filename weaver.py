@@ -211,8 +211,7 @@ def main(arguments):
             if starting_word not in printed_words:
                 counter.count(starting_word)
                 sets.append(counter.found_words)
-                for output_word in counter.found_words:
-                    printed_words.add(output_word)
+                printed_words |= counter.found_words
 
         print(f'Found {len(sets)} connected sets across {len(dictionary)} words.')
         for reachable_set in sets:
