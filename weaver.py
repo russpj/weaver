@@ -7,6 +7,7 @@ from sys import stdin, stdout, stderr, argv
 from getopt import getopt, GetoptError
 from math import log2
 from time import process_time
+from collections import deque
 
 
 class ansi_colors:
@@ -72,7 +73,6 @@ class Solver:
         self.solutions_level = -1
         self.stop_solver = False
         self.solutions = []
-        return
 
     def print_solution(self, step_index):
         solution = []
@@ -105,7 +105,6 @@ class Solver:
                     self.solutions_found = True
                     self.solutions_level = step.step
                 self.solutions.append(step_index)
-        return
 
     def solve(self):
         if self.verbose:
@@ -129,21 +128,48 @@ class Solver:
         for solution in self.solutions:
             self.print_solution(solution)
 
+
+class Counter:
+    def __init__(self, dictionary, verbose=False):
+        self.dictionary = dictionary
+        self.verbose = verbose  
+        self.found_words = set()
+        self.next_words = deque()
+        
+    def add_word(self, word):
+        if word not in self.found_words:
+            if self.verbose:
+                print(f'Adding {word}')
+            self.next_words.append(word)
+            self.found_words.add(word)
+
+    def count(self, start):
+        self.found_words = set()
+        self.next_words = deque()
+        self.add_word(start)
+        while self.next_words:
+            current_word = self.next_words.pop()
+            for next_word in self.dictionary:
+                if different_letters(current_word, next_word) == 1:
+                    self.add_word(next_word)
+
+    def print_info(self):
         return
 
 
 def main(arguments):
-    command_line_documentation = "Wordle.py -h -v -s -l {tapestries_file} {start_word} {end_word}"
+    command_line_documentation = "Wordle.py -h -v -s -c -l {tapestries_file} {start_word} {end_word}"
     num_letters = 4
     dictionary_name = f"{num_letters}_letter_words.txt"
     list = ''
     verbose = False
     stats = False
+    count = False
 
     dictionary = read_words(dictionary_name)
    
     try:
-        opts, args = getopt(arguments, "hvsl:", ("help", "verbose", "statistics", "list="))
+        opts, args = getopt(arguments, "hvscl:", ("help", "verbose", "statistics", "count", "list="))
     except GetoptError:
         print(f'Invalid Arguments: {command_line_documentation}')
         exit(2)
@@ -158,6 +184,9 @@ def main(arguments):
 
         if opt in ('-s', '--statistics'):
             stats = True
+
+        if opt in ('-c', '--count'):
+            count = True
 
         if opt in ('-l', '--list'):
             list = arg
@@ -174,13 +203,33 @@ def main(arguments):
         exit(2)
 
     start_time = process_time()
-    while keys:
-        first = keys[0]
-        last = keys[1]
-        keys = keys[2:]
-        
-        solver = Solver(first, last, dictionary, verbose)
-        solver.solve()
+    if count:
+        counter = Counter(dictionary, verbose)
+        counter.count("poem")
+        print(f'{len(counter.found_words)} words found from {len(dictionary)} words in dictionary')
+        new_starting_words = []
+        for word in dictionary:
+            if word not in counter.found_words:
+                new_starting_words.append(word)
+        printed_words = set()
+        for starting_word in new_starting_words:
+            if starting_word not in printed_words:
+                counter.count(starting_word)
+                print(f'found a set of {len(counter.found_words)} words:', end='')
+                for output_word in counter.found_words:
+                    printed_words.add(output_word)
+                    print(f'{output_word} ', end='')
+                print()
+
+    else:
+        while keys:
+            first = keys[0]
+            last = keys[1]
+            keys = keys[2:]
+            
+            solver = Solver(first, last, dictionary, verbose)
+            solver.solve()
+
     end_time = process_time()
 
     if stats:
