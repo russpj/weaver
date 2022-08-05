@@ -162,18 +162,19 @@ class Counter:
 
 
 def main(arguments):
-    command_line_documentation = "Wordle.py -h -v -s -c -l {tapestries_file} {start_word} {end_word}"
+    command_line_documentation = "Wordle.py -h -v -s -c -p -l {tapestries_file} {start_word} {end_word}"
     num_letters = 4
     dictionary_name = f"{num_letters}_letter_words.txt"
-    list = ''
+    list_file = ''
     verbose = False
     stats = False
     count = False
+    find_paths = False
 
     dictionary = read_words(dictionary_name)
    
     try:
-        opts, args = getopt(arguments, "hvscl:", ("help", "verbose", "statistics", "count", "list="))
+        opts, args = getopt(arguments, "hvscpl:", ("help", "verbose", "statistics", "count", "paths", "list="))
     except GetoptError:
         print(f'Invalid Arguments: {command_line_documentation}')
         exit(2)
@@ -192,11 +193,14 @@ def main(arguments):
         if opt in ('-c', '--count'):
             count = True
 
-        if opt in ('-l', '--list'):
-            list = arg
+        if opt in ('-p', '--paths'):
+            find_paths = True
 
-    if list != '':
-        keys = read_words(list)
+        if opt in ('-l', '--list'):
+            list_file = arg
+
+    if list_file != '':
+        keys = read_words(list_file)
     elif len(args) > 1:
         keys = args
     else:
@@ -223,6 +227,9 @@ def main(arguments):
             for output_word in reachable_set:
                 print(f'{output_word} ', end='')
             print()
+
+    elif find_paths:
+        pass
 
     else:
         while keys:
