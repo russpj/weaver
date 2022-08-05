@@ -113,6 +113,10 @@ class Solver:
     def solve(self):
         if self.verbose:
             print(f'Find {self.target} starting with {self.steps[0].word}')
+            
+        if self.target not in self.dictionary:
+            print(f'Cannot reach {self.target} with this dictionary.')
+            return
 
         step_index = 0
         while not self.stop_solver and step_index < len(self.steps):
