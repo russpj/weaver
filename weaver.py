@@ -73,6 +73,7 @@ class Solver:
         self.solutions_level = -1
         self.stop_solver = False
         self.solutions = []
+        self.previous_words = {}
 
     def print_solution(self, step_index):
         solution = []
@@ -87,19 +88,22 @@ class Solver:
         print(f'{solution_display}')
 
     def word_used_previously(self, step):
-        for previous_step in self.steps:
-            if previous_step.word == step.word and previous_step.step < step.step:
+        if step.word in self.previous_words:
+            if step.step > self.previous_words[step.word]:
                 return True
         return False
 
     def add_step(self, step):
         target_found = step.word == self.target
-        if target_found or not self.word_used_previously(step):
+        new_word = not self.word_used_previously(step)
+        if target_found or new_word:
             if self.solutions_found:
                 if step.step > self.solutions_level:
                     self.stop_solver = True
             step_index = len(self.steps)
             self.steps.append(step)
+            if new_word:
+                self.previous_words[step.word] = step.step
             if target_found:
                 if not self.solutions_found:
                     self.solutions_found = True
@@ -212,7 +216,7 @@ def main(arguments):
                 counter.count(starting_word)
                 sets.append(counter.found_words)
                 printed_words |= counter.found_words
-
+                
         print(f'Found {len(sets)} connected sets across {len(dictionary)} words.')
         for reachable_set in sets:
             print(f'found a set of {len(reachable_set)} words:', end='')
