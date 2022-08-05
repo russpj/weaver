@@ -63,12 +63,13 @@ class Step:
 
 
 class Solver:
-    def __init__(self, start, target, dictionary, verbose=False):
+    def __init__(self, start, target, dictionary, verbose=False, find_paths=False):
         self.target = target
         self.dictionary = dictionary
         first_step = Step(start, 0, 0)
         self.steps = [first_step]
         self.verbose = verbose
+        self.find_paths = find_paths
         self.solutions_found = False
         self.solutions_level = -1
         self.stop_solver = False
