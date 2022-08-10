@@ -253,4 +253,9 @@ def main(arguments):
 
 
 if __name__ == '__main__':
+    if len(argv[1:]) == 0:
+        command_line = input('Enter the command line: ')
+        arguments = command_line.split()
+        argv.extend(arguments)
+
     main(argv[1:])
