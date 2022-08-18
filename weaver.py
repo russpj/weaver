@@ -179,7 +179,8 @@ def main(arguments):
     dictionary = read_words(dictionary_name)
    
     try:
-        opts, args = getopt(arguments, "hvscpl:", ("help", "verbose", "statistics", "count", "paths", "list="))
+        opts, args = getopt(arguments, "hvscpl:", 
+            ("help", "verbose", "statistics", "count", "paths", "list="))
     except GetoptError:
         print(f'Invalid Arguments: {command_line_documentation}')
         exit(2)
@@ -206,10 +207,8 @@ def main(arguments):
 
     if list_file != '':
         keys = read_words(list_file)
-    elif len(args) > 1:
-        keys = args
     else:
-        keys = ["dogs","bark"]
+        keys = args
 
     if len(keys) % 2 != 0:
         print(f'Invalid Arguments: {command_line_documentation}')
@@ -217,10 +216,12 @@ def main(arguments):
 
     start_time = process_time()
     if count:
+        if keys == ['*'] or len(keys) == 0:
+            keys = dictionary
         sets = []
         counter = Counter(dictionary, verbose)
         printed_words = set()
-        for starting_word in dictionary:
+        for starting_word in keys:
             if starting_word not in printed_words:
                 counter.count(starting_word)
                 sets.append(counter.found_words)
@@ -234,7 +235,12 @@ def main(arguments):
             print()
 
     elif find_paths:
-        pass
+        if keys == ['*']:
+            keys = dictionary
+        explorer = Counter(dictionary, verbose)
+        for key in keys:
+            explorer.count(key)
+
 
     else:
         while keys:
