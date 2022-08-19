@@ -210,13 +210,9 @@ def main(arguments):
     else:
         keys = args
 
-    if len(keys) % 2 != 0:
-        print(f'Invalid Arguments: {command_line_documentation}')
-        exit(2)
-
     start_time = process_time()
     if count:
-        if keys == ['*'] or len(keys) == 0:
+        if len(keys) == 0:
             keys = dictionary
         sets = []
         counter = Counter(dictionary, verbose)
@@ -235,7 +231,7 @@ def main(arguments):
             print()
 
     elif find_paths:
-        if keys == ['*']:
+        if len(keys) == 0:
             keys = dictionary
         explorer = Counter(dictionary, verbose)
         for key in keys:
