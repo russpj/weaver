@@ -106,6 +106,7 @@ class Solver:
             if self.solutions_found:
                 if step.step > self.solutions_level:
                     self.stop_solver = True
+                    return
             step_index = len(self.steps)
             self.steps.append(step)
             if new_word:
