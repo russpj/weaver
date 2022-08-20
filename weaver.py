@@ -88,6 +88,11 @@ class Solver:
         solution_display = '-->'.join(str(x) for x in solution)
         print(f'{solution_display}')
 
+    def print_solutions(self):
+        print(f'{len(self.solutions)} {self.solutions_level}-step solutions')
+        for solution in self.solutions:
+            self.print_solution(solution)
+       
     def word_used_previously(self, step):
         if step.word in self.previous_words:
             if step.step > self.previous_words[step.word]:
@@ -133,10 +138,6 @@ class Solver:
 
             step_index += 1
 
-        print(f'{len(self.solutions)} {self.solutions_level}-step solutions')
-        for solution in self.solutions:
-            self.print_solution(solution)
-
 
 class Counter:
     def __init__(self, dictionary, verbose=False):
@@ -166,6 +167,20 @@ class Counter:
         return
 
 
+def run_test(test, dictionary, verbose):
+    start = test[0]
+    target = test[1]
+    num_solutions = test[2]
+    solution_length = test[3]
+    solver = Solver(start, target, dictionary, verbose)
+    solver.solve()
+    if len(solver.solutions) != num_solutions or solver.solutions_level != solution_length:
+        print(f'{start}-->{target} test failed:') 
+        print(f'found {len(solver.solutions)} solutions of length {solver.solutions_level} ')
+        print(f'expected {num_solutions} of {solution_length}')
+        return False
+    return True
+
 def main(arguments):
     command_line_documentation = "Wordle.py -h -v -s -c -p -l {tapestries_file} {start_word} {end_word}"
     num_letters = 4
@@ -175,12 +190,13 @@ def main(arguments):
     stats = False
     count = False
     find_paths = False
+    test = False
 
     dictionary = read_words(dictionary_name)
    
     try:
-        opts, args = getopt(arguments, "hvscpl:", 
-            ("help", "verbose", "statistics", "count", "paths", "list="))
+        opts, args = getopt(arguments, "hvscptl:", 
+            ("help", "verbose", "statistics", "count", "paths", "test", "list="))
     except GetoptError:
         print(f'Invalid Arguments: {command_line_documentation}')
         exit(2)
@@ -201,6 +217,9 @@ def main(arguments):
 
         if opt in ('-p', '--paths'):
             find_paths = True
+
+        if opt in ('-t', '--test'):
+            test = True
 
         if opt in ('-l', '--list'):
             list_file = arg
@@ -237,6 +256,25 @@ def main(arguments):
         for key in keys:
             explorer.count(key)
 
+    elif test:
+        tests = [
+            ['oaky', 'wine', 7, 5],
+            ['soft', 'ware', 3, 4],
+            ['stay', 'woke', 1, 7],
+            ['very', 'much', 2, 6],
+            ['wham', 'boom', 8, 6],
+            ['fear', 'calm', 2, 5],
+            ['iamb', 'poet', 23, 7],
+            ['palm', 'read', 1, 5]
+        ]
+
+        all_tests_passed = True # so far
+        for test in tests:
+            passed = run_test(test, dictionary, verbose)
+            if not passed:
+                all_tests_passed = False
+        if all_tests_passed:
+            print('All Tests Passed!')
 
     else:
         while keys:
@@ -246,6 +284,7 @@ def main(arguments):
             
             solver = Solver(first, last, dictionary, verbose)
             solver.solve()
+            solver.print_solutions()
 
     end_time = process_time()
 
