@@ -3,9 +3,8 @@
 # weaver
 # Plays the popular game with the two words input on the command line
 
-from sys import stdin, stdout, stderr, argv
+from sys import argv
 from getopt import getopt, GetoptError
-from math import log2
 from time import process_time
 from collections import deque
 
@@ -282,7 +281,7 @@ def main(arguments):
             first = keys[0]
             last = keys[1]
             keys = keys[2:]
-            
+
             solver = Solver(first, last, dictionary, verbose)
             solver.solve()
             solver.print_solutions()
@@ -293,11 +292,10 @@ def main(arguments):
         print(f'Duration: {end_time - start_time} seconds')
 
 
-
 if __name__ == '__main__':
     if len(argv[1:]) == 0:
         command_line = input('Enter the command line: ')
-        arguments = command_line.split()
-        argv.extend(arguments)
+        cl_arguments = command_line.split()
+        argv.extend(cl_arguments)
 
     main(argv[1:])
