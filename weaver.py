@@ -99,13 +99,12 @@ class Solver:
         return False
 
     def add_step(self, step):
+        if self.solutions_found and step.step > self.solutions_level:
+            self.stop_solver = True
+            return
         target_found = step.word == self.target
         new_word = not self.word_used_previously(step)
         if target_found or new_word:
-            if self.solutions_found:
-                if step.step > self.solutions_level:
-                    self.stop_solver = True
-                    return
             step_index = len(self.steps)
             self.steps.append(step)
             if new_word:
