@@ -234,14 +234,13 @@ def main(arguments):
             keys = dictionary
         sets = []
         counter = Counter(dictionary, verbose)
-        printed_words = set()
+        printed_words = {}
         for starting_word in keys:
             if starting_word not in printed_words:
                 counter.count(starting_word)
-                just_words = {word for word in counter.found_words}
-                sets.append(just_words)
-                printed_words |= just_words
-                
+                sets.append(counter.found_words)
+                printed_words = {**printed_words, **counter.found_words}
+
         print(f'Found {len(sets)} connected sets across {len(keys)} words.')
         total_words_found = 0
         for reachable_set in sets:
