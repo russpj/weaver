@@ -242,12 +242,15 @@ def main(arguments):
                 sets.append(just_words)
                 printed_words |= just_words
                 
-        print(f'Found {len(sets)} connected sets across {len(dictionary)} words.')
+        print(f'Found {len(sets)} connected sets across {len(keys)} words.')
+        total_words_found = 0
         for reachable_set in sets:
             print(f'found a set of {len(reachable_set)} words:', end='')
+            total_words_found += len(reachable_set)
             for output_word in reachable_set:
                 print(f'{output_word} ', end='')
             print()
+        print (f'{total_words_found} total words found')
 
     elif find_paths:
         if len(keys) == 0:
