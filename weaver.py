@@ -142,25 +142,25 @@ class Counter:
     def __init__(self, dictionary, verbose=False):
         self.dictionary = dictionary
         self.verbose = verbose  
-        self.found_words = set()
+        self.found_words = {}
         self.next_words = deque()
         
-    def add_word(self, word):
+    def add_word(self, word, step):
         if word not in self.found_words:
             if self.verbose:
                 print(f'Adding {word}')
-            self.next_words.append(word)
-            self.found_words.add(word)
+            self.next_words.append((word, step))
+            self.found_words[word] = step
 
     def count(self, start):
-        self.found_words = set()
+        self.found_words = {}
         self.next_words = deque()
-        self.add_word(start)
+        self.add_word(start, 0)
         while self.next_words:
-            current_word = self.next_words.pop()
+            current_word, step = self.next_words.pop()
             for next_word in self.dictionary:
                 if different_letters(current_word, next_word) == 1:
-                    self.add_word(next_word)
+                    self.add_word(next_word, step+1)
 
     def print_info(self):
         return
@@ -238,7 +238,7 @@ def main(arguments):
         for starting_word in keys:
             if starting_word not in printed_words:
                 counter.count(starting_word)
-                just_words = {entry for entry in counter.found_words}
+                just_words = {word for word in counter.found_words}
                 sets.append(just_words)
                 printed_words |= just_words
                 
