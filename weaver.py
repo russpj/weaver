@@ -157,7 +157,7 @@ class Counter:
         self.next_words = deque()
         self.add_word(start, 0)
         while self.next_words:
-            current_word, step = self.next_words.pop()
+            current_word, step = self.next_words.popleft()
             for next_word in self.dictionary:
                 if different_letters(current_word, next_word) == 1:
                     self.add_word(next_word, step+1)
@@ -255,7 +255,18 @@ def main(arguments):
 
         if find_paths:
             for reachable_set in sets:
-                print ([f'{entry} ({reachable_set[entry]})' for entry in reachable_set])
+                if verbose:
+                    print(reachable_set)
+                words = list(reachable_set.keys())
+                start_word = words[0]
+                max_depth = reachable_set[words[len(words)-1]]
+                print(f'{start_word} {max_depth} ', end='')
+                for word in reversed(words):
+                    if reachable_set[word] == max_depth:
+                        print(f'{word} ', end='')
+                    else:
+                        break
+                print ()
 
     elif test:
         tests = [
