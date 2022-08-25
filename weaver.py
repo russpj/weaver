@@ -229,7 +229,7 @@ def main(arguments):
         keys = args
 
     start_time = process_time()
-    if count:
+    if count or find_paths:
         if len(keys) == 0:
             keys = dictionary
         sets = []
@@ -250,13 +250,6 @@ def main(arguments):
                 print(f'{output_word} ', end='')
             print()
         print (f'{total_words_found} total words found')
-
-    elif find_paths:
-        if len(keys) == 0:
-            keys = dictionary
-        explorer = Counter(dictionary, verbose)
-        for key in keys:
-            explorer.count(key)
 
     elif test:
         tests = [
