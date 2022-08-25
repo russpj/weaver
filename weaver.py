@@ -236,20 +236,26 @@ def main(arguments):
         counter = Counter(dictionary, verbose)
         printed_words = {}
         for starting_word in keys:
-            if starting_word not in printed_words:
+            if find_paths or starting_word not in printed_words:
                 counter.count(starting_word)
                 sets.append(counter.found_words)
-                printed_words = {**printed_words, **counter.found_words}
+                if count:
+                    printed_words = {**printed_words, **counter.found_words}
 
         print(f'Found {len(sets)} connected sets across {len(keys)} words.')
-        total_words_found = 0
-        for reachable_set in sets:
-            print(f'found a set of {len(reachable_set)} words:', end='')
-            total_words_found += len(reachable_set)
-            for output_word in reachable_set:
-                print(f'{output_word} ', end='')
-            print()
-        print (f'{total_words_found} total words found')
+        if count:
+            total_words_found = 0
+            for reachable_set in sets:
+                print(f'found a set of {len(reachable_set)} words:', end='')
+                total_words_found += len(reachable_set)
+                for output_word in reachable_set:
+                    print(f'{output_word} ', end='')
+                print()
+            print (f'{total_words_found} total words found')
+
+        if find_paths:
+            for reachable_set in sets:
+                print ([f'{entry} ({reachable_set[entry]})' for entry in reachable_set])
 
     elif test:
         tests = [
