@@ -181,7 +181,7 @@ def run_test(test, dictionary, verbose):
     return True
 
 def main(arguments):
-    command_line_documentation = "Wordle.py -h -v -s -c -p -l {tapestries_file} {start_word} {end_word}"
+    command_line_documentation = "Wordle.py -h -v -s -c -p -l -e {word_to_eliminate} {tapestries_file} {start_word} {end_word}"
     num_letters = 4
     dictionary_name = f"{num_letters}_letter_words.txt"
     list_file = ''
@@ -190,12 +190,13 @@ def main(arguments):
     count = False
     find_paths = False
     test = False
+    bad_words = set()
 
     dictionary = read_words(dictionary_name)
    
     try:
-        opts, args = getopt(arguments, "hvscptl:", 
-            ("help", "verbose", "statistics", "count", "paths", "test", "list="))
+        opts, args = getopt(arguments, "hvscpte:l:", 
+            ("help", "verbose", "statistics", "count", "paths", "test", "eliminate=", "list="))
     except GetoptError:
         print(f'Invalid Arguments: {command_line_documentation}')
         exit(2)
@@ -219,6 +220,9 @@ def main(arguments):
 
         if opt in ('-t', '--test'):
             test = True
+
+        if opt in ('-e', '--eliminate'):
+            bad_words.add(arg)
 
         if opt in ('-l', '--list'):
             list_file = arg
