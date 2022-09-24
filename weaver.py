@@ -36,12 +36,17 @@ def convert_score_to_colors(score):
     return letters
 
 
-def read_words(words_file_name):
+def read_words(words_file_name, bad_words=set(), verbose=False):
     words = []
     with open(words_file_name, "r") as words_file:
         for line in words_file:
             for word in line.split():
-                words.append(word)
+                if word not in bad_words:
+                    words.append(word)
+                else:
+                    if verbose:
+                        print(f'Removing {word}.')
+
     return words
 
 
@@ -192,8 +197,6 @@ def main(arguments):
     test = False
     bad_words = set()
 
-    dictionary = read_words(dictionary_name)
-   
     try:
         opts, args = getopt(arguments, "hvscpte:l:", 
             ("help", "verbose", "statistics", "count", "paths", "test", "eliminate=", "list="))
@@ -232,11 +235,8 @@ def main(arguments):
     else:
         keys = args
 
-    for bad_word in bad_words:
-        if verbose:
-            print(f'Removing {bad_word} from dictionary.')
-        dictionary.remove(bad_word)
-
+    dictionary = read_words(dictionary_name, bad_words, verbose)
+   
     start_time = process_time()
     if count or find_paths:
         if len(keys) == 0:
