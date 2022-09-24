@@ -232,6 +232,11 @@ def main(arguments):
     else:
         keys = args
 
+    for bad_word in bad_words:
+        if verbose:
+            print(f'Removing {bad_word} from dictionary.')
+        dictionary.remove(bad_word)
+
     start_time = process_time()
     if count or find_paths:
         if len(keys) == 0:
