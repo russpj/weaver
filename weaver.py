@@ -45,7 +45,7 @@ def read_words(words_file_name, bad_words=set(), verbose=False):
                     words.append(word)
                 else:
                     if verbose:
-                        print(f'Removing {word}.')
+                        print(f'Removing {word}.')      
 
     return words
 
