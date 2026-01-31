@@ -322,9 +322,22 @@ def main(arguments):
 
 
 if __name__ == '__main__':
+    interactive = False
     if len(argv[1:]) == 0:
+        interactive = True
         command_line = input('Enter the command line: ')
         cl_arguments = command_line.split()
         argv.extend(cl_arguments)
 
-    main(argv[1:])
+    while True:
+        repeat = False
+        main(argv[1:])
+        if interactive:
+            command_line = input('Enter extensions to the command line: ')
+            cl_arguments = command_line.split()
+            if cl_arguments:
+                argv[1:1] = cl_arguments
+                repeat = True
+        if not repeat:
+            break
+
