@@ -9,6 +9,9 @@ from time import process_time
 from collections import deque
 
 
+application_name = "weaver"
+
+
 class ansi_colors:
     letter_right_place = '\033[32m'
     letter_wrong_place = '\033[33m'
@@ -325,7 +328,7 @@ if __name__ == '__main__':
     interactive = False
     if len(argv[1:]) == 0:
         interactive = True
-        command_line = input('Enter the command line: ')
+        command_line = input(f'Enter the command line for {application_name}: ')
         cl_arguments = command_line.split()
         argv.extend(cl_arguments)
 
